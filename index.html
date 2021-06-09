@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 1.5rem;
+        }
+        textarea {
+            width: 100%;
+            font-family: monospace;
+            outline: none;
+            resize: none;
+        }
+        table {
+            width: 100%;
+        }
+        td {
+            width: 45%;
+        }
+        td:nth-child(2) {
+            text-align: center;
+            width: 10%;
+        }
+        .label {
+            font-size: 1.5rem;
+            font-weight: 600;
+            font-family: sans-serif;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 20px;
+            background: #32affc;
+            color: white;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <div class="label">Input</div>
+                <textarea id="input" rows="50">/* Copy CSS Here */</textarea>
+            </td>
+            <td>
+                <button onclick="convert()">Convert<br/><b>→</b></button>
+            </td>
+            <td>
+                <div class="label">Output</div>
+                <textarea id="output" rows="50"></textarea>
+            </td>
+        </tr>
+    </table>
+    <script>
+        function convert() {
+            var css = document.getElementById("input").value;
+            for (var i = 0; i < css.length; i++) {
+                var end;
+                if (css[i] === 'p') {
+                    i++;
+                    if (css[i] === 'x') {
+                        end = i;
+                        while (css[i] !== ' ' && css[i] !== ':') {
+                            i--;
+                        }
+                        var start = i;
+                        var px = "";
+                        while (i !== end) {
+                            i++;
+                            px += css[i];
+                        }
+                        px = parseInt(px);
+                        var rem = px / 16;
+                        rem = rem + "rem";
+                        css = css.replace(px + "px", rem);
+                    }
+                }
+            }
+            document.getElementById("output").value = css;
+        }
+    </script>
+</body>
+</html>
