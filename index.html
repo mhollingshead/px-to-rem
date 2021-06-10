@@ -106,7 +106,6 @@
             for (var i = 0; i < css.length; i++) {
                 var end;
                 if (css[i]+css[i+1] === 'px') {
-                    i+=2;
                     end = i;
                     while (css[i] !== ' ' && css[i] !== ':') i--;
                     var start = i;
