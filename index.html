@@ -4,45 +4,74 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>css px to rem converter</title>
+    <title>css px to rem</title>
     <style>
+        *, *:before, *:after {
+            box-sizing: border-box;
+        }
         body {
-            margin: 1.5rem;
+            padding: 1rem;
+            background: #333333;
+            color: white;
         }
         textarea {
             width: 100%;
             font-family: monospace;
             outline: none;
             resize: none;
+            background: #262626;
+            color: white;
+            border-radius: 0.625rem;
+            padding: 0.625rem;
+            border: 3px solid #3d3d3d;
+            transition: 0.2s;
+        }
+        textarea#input:focus {
+            border-color: #ff2e66;
+            transition: 0.2s;
+        }
+        textarea.converted {
+            border-color: #36d64e;
+            transition: 0.2s;
+        }
+        .red {
+            background: #ff2e66;
+        }
+        .green {
+            background: #36d64e;
         }
         table {
             width: 100%;
         }
         td {
             width: 45%;
+            text-align: center;
         }
         td:nth-child(2) {
-            text-align: center;
             width: 10%;
         }
         .label {
             font-size: 1.5rem;
             font-weight: 600;
             font-family: sans-serif;
-            padding-top: 20px;
-            padding-bottom: 20px;
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
             text-align: center;
         }
+        button#button {
+            padding: 1.25rem;
+            font-weight: 600;
+        }
         button {
-            padding: 20px;
-            background: #32affc;
-            color: white;
-            border: none;
-            outline: none;
-            border-radius: 5px;
             cursor: pointer;
             filter: brightness(1);
             transition: 0.2s;
+            border: none;
+            outline: none;
+            border-radius: 0.3125rem;
+            color: white;
+            background-color: #5e5e5e;
+            padding: 0.7rem;
         }
         button:hover {
             filter: brightness(0.9);
@@ -55,14 +84,18 @@
         <tr>
             <td>
                 <div class="label">Input</div>
-                <textarea id="input" rows="50">/* Paste CSS Here */</textarea>
+                <textarea id="input" rows="50" onmousedown="toggle()">/* Copy CSS Here */</textarea>
+                <button onclick="document.getElementById('input').select()">Select All</button>
+                <button onclick="document.getElementById('input').value=''">Clear</buttoon>
             </td>
             <td>
-                <button onclick="convert()">Convert<br/><b>→</b></button>
+                <button onclick="convert()" class="red" id="button">Convert<br/><b>→</b></button>
             </td>
             <td>
                 <div class="label">Output</div>
-                <textarea id="output" rows="50"></textarea>
+                <textarea id="output" rows="50" readonly></textarea>
+                <button onclick="document.getElementById('output').select()">Select All</button>
+                <button onclick="document.getElementById('output').select(); document.execCommand('copy')">Copy to Clipboard</buttoon>
             </td>
         </tr>
     </table>
@@ -71,27 +104,35 @@
             var css = document.getElementById("input").value;
             for (var i = 0; i < css.length; i++) {
                 var end;
-                if (css[i] === 'p') {
-                    i++;
-                    if (css[i] === 'x') {
-                        end = i;
-                        while (css[i] !== ' ' && css[i] !== ':') {
-                            i--;
-                        }
-                        var start = i;
-                        var px = "";
-                        while (i !== end) {
-                            i++;
-                            px += css[i];
-                        }
-                        px = parseInt(px);
-                        var rem = px / 16;
-                        rem = rem + "rem";
-                        css = css.replace(px + "px", rem);
+                if (css[i]+css[i+1] === 'px') {
+                    i+=2;
+                    end = i;
+                    while (css[i] !== ' ' && css[i] !== ':') i--;
+                    var start = i;
+                    var px = "";
+                    while (i !== end) {
+                        i++;
+                        px += css[i];
                     }
+                    px = parseInt(px);
+                    var rem = px / 16;
+                    rem = rem + "rem";
+                    css = css.replace(px + "px", rem);
                 }
             }
             document.getElementById("output").value = css;
+            document.getElementById("output").classList.add('converted');
+            document.getElementById("button").classList.remove('red');
+            document.getElementById("button").classList.add('green');
+        }
+        function toggle() {
+            if (document.getElementById("button").classList.contains('green')) {
+                document.getElementById("button").classList.remove('green');
+                document.getElementById("button").classList.add('red');
+            }
+            if (document.getElementById("output").classList.contains('converted')) {
+                document.getElementById("output").classList.toggle('converted');
+            }
         }
     </script>
 </body>
