@@ -107,7 +107,7 @@
                 var end;
                 if (css[i]+css[i+1] === 'px') {
                     end = i;
-                    while (css[i] !== ' ' && css[i] !== ':') i--;
+                    while (css[i] !== ' ' && css[i] !== ':' && css[i] !== '(') i--;
                     var start = i;
                     var px = "";
                     while (i !== end) {
